@@ -21,7 +21,9 @@ export default function GameBoard({ onSelectSqaure, turns }) {
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => onSelectSqaure(rowIndex, colIndex)}>
+                <button
+                  onClick={() => onSelectSqaure(rowIndex, colIndex)}
+                  disabled={playerSymbol !== null}>
                   {playerSymbol}
                 </button>
               </li>
