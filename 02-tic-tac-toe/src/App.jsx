@@ -19,24 +19,7 @@ function setActivePlayer(gameTurns) {
   return currPlayer;
 }
 
-function App() {
-  const [players, setPlayers] = useState({
-    X: 'Player 1',
-    O: 'Player 2',
-  });
-  const [gameTurns, setGameTurns] = useState([]);
-
-  const currPlayer = setActivePlayer(gameTurns);
-
-  let gameBoard = [...initialGameBoard.map((row) => [...row])];
-
-  for (const turn of gameTurns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
-
+function deriveWinner(gameBoard, players) {
   let winner;
 
   for (const combination of WINNING_COMBINATIONS) {
@@ -55,6 +38,33 @@ function App() {
       winner = players[firstSquareSymbol];
     }
   }
+
+  return winner;
+}
+
+function deriveGameBoard(gameTurns) {
+  let gameBoard = [...initialGameBoard.map((row) => [...row])];
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+
+    gameBoard[row][col] = player;
+  }
+
+  return gameBoard;
+}
+
+function App() {
+  const [players, setPlayers] = useState({
+    X: 'Player 1',
+    O: 'Player 2',
+  });
+  const [gameTurns, setGameTurns] = useState([]);
+
+  const currPlayer = setActivePlayer(gameTurns);
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard, players);
 
   const isDraw = gameTurns.length === 9 && !winner;
 
@@ -87,13 +97,13 @@ function App() {
         <ol id='players' className='highlight-player'>
           <Player
             onNameChange={handleNameChange}
-            name='Player 1'
+            name={players.X}
             symbol='X'
             isActive={currPlayer === 'X'}
           />
           <Player
             onNameChange={handleNameChange}
-            name='Player 2'
+            name={players.O}
             symbol='O'
             isActive={currPlayer === 'O'}
           />
