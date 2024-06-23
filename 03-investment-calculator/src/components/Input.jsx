@@ -4,7 +4,7 @@ export default function Input({ label, handleUpdate }) {
   const [value, setValue] = useState(0);
 
   return (
-    <div>
+    <p>
       <label>{label}</label>
       <input
         type='number'
@@ -17,6 +17,6 @@ export default function Input({ label, handleUpdate }) {
         }}
         min={0}
       />
-    </div>
+    </p>
   );
 }
