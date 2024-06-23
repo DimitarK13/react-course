@@ -27,7 +27,7 @@ function App() {
     });
   }
 
-  let res = calculateInvestmentResults(data);
+  const res = calculateInvestmentResults(data);
 
   return (
     <>
