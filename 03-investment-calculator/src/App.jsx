@@ -18,8 +18,10 @@ function App() {
     initialInvestment: 0,
     annualInvestment: 0,
     expectedReturn: 0,
-    duration: 1,
+    duration: 0,
   });
+
+  const dataIsValid = data.duration >= 1;
 
   function handleUpdate(input, value) {
     setData((prevValues) => {
@@ -33,7 +35,10 @@ function App() {
     <>
       <Header />
       <UserInput onUpdate={handleUpdate} />
-      <Results results={res} />
+      {dataIsValid && <Results results={res} />}
+      {!dataIsValid && (
+        <p className='center'>Please enter a duration greate than 0</p>
+      )}
     </>
   );
 }
