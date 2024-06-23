@@ -1,16 +1,16 @@
 import Input from './Input';
 
-export default function UserInput() {
+export default function UserInput({ onUpdate }) {
   return (
     <div id='user-input'>
       <div className='input-group'>
-        <Input label='Initial Investement' />
-        <Input label='Annual Investement' />
+        <Input handleUpdate={onUpdate} label='Initial Investment' />
+        <Input handleUpdate={onUpdate} label='Annual Investment' />
       </div>
 
       <div className='input-group'>
-        <Input label='Expected Return' />
-        <Input label='Duration' />
+        <Input handleUpdate={onUpdate} label='Expected Return' />
+        <Input handleUpdate={onUpdate} label='Duration' />
       </div>
     </div>
   );
