@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-export default function Input({ label }) {
-  const [value, setValue] = useState();
+export default function Input({ label, handleUpdate }) {
+  const [value, setValue] = useState(0);
 
   return (
     <div>
@@ -10,7 +10,12 @@ export default function Input({ label }) {
         type='number'
         required
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          setValue(newValue);
+          handleUpdate(label, newValue);
+        }}
+        min={0}
       />
     </div>
   );
