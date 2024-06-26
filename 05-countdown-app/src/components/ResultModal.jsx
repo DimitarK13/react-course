@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { createPortal } from 'react-dom';
 
 const ResultModal = forwardRef(function ResultModal(
   { targetTime, timeRemaining, onReset },
@@ -8,7 +9,7 @@ const ResultModal = forwardRef(function ResultModal(
   const polishedTimeRemaining = (timeRemaining / 1000).toFixed(2);
   const score = Math.round((1 - timeRemaining / (targetTime * 1000)) * 100);
 
-  return (
+  return createPortal(
     <dialog ref={ref} className='result-modal' onClose={onReset}>
       {userLost && <h2>You Lost</h2>}
       {!userLost && <h2>Your Score: {score}</h2>}
@@ -22,7 +23,8 @@ const ResultModal = forwardRef(function ResultModal(
       <form method='dialog'>
         <button onClick={onReset}>Close</button>
       </form>
-    </dialog>
+    </dialog>,
+    document.getElementById('modal')
   );
 });
 
