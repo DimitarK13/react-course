@@ -27,10 +27,13 @@ function App() {
 
       return {
         ...prevValues,
-        projects: [...prevValues.projectsArray, newProject],
+        selectedProject: undefined,
+        projectsArray: [...prevValues.projectsArray, newProject],
       };
     });
   }
+
+  console.log(projects.projectsArray);
 
   let content;
 
@@ -42,7 +45,10 @@ function App() {
 
   return (
     <main className='h-screen my-8 flex gap-8'>
-      <Sidebar onAddProject={handleStartAddProject} />
+      <Sidebar
+        onAddProject={handleStartAddProject}
+        projects={projects.projectsArray}
+      />
       {content}
     </main>
   );
