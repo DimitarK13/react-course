@@ -9,7 +9,7 @@ function App() {
     projectsArray: [],
   });
 
-  function handleAddProject() {
+  function handleStartAddProject() {
     setProjects((prevValues) => {
       return {
         ...prevValues,
@@ -18,17 +18,31 @@ function App() {
     });
   }
 
+  function handleAddProject(projectData) {
+    setProjects((prevValues) => {
+      const newProject = {
+        ...projectData,
+        id: Math.random(),
+      };
+
+      return {
+        ...prevValues,
+        projects: [...prevValues.projectsArray, newProject],
+      };
+    });
+  }
+
   let content;
 
   if (projects.selectedProject === null) {
-    content = <NewProject />;
+    content = <NewProject onAdd={handleAddProject} />;
   } else if (projects.selectedProject === undefined) {
-    content = <NoProjectSelected onAddProject={handleAddProject} />;
+    content = <NoProjectSelected onAddProject={handleStartAddProject} />;
   }
 
   return (
     <main className='h-screen my-8 flex gap-8'>
-      <Sidebar onAddProject={handleAddProject} />
+      <Sidebar onAddProject={handleStartAddProject} />
       {content}
     </main>
   );
