@@ -2,6 +2,7 @@ import { useState } from 'react';
 import NewProject from './components/NewProject';
 import NoProjectSelected from './components/NoProjectSelected';
 import Sidebar from './components/Sidebar';
+import SelectedProject from './components/selectedProject';
 
 function App() {
   const [projects, setProjects] = useState({
@@ -27,6 +28,15 @@ function App() {
     });
   }
 
+  function handleSelectProject(id) {
+    setProjects((prevValues) => {
+      return {
+        ...prevValues,
+        selectedProject: id,
+      };
+    });
+  }
+
   function handleAddProject(projectData) {
     setProjects((prevValues) => {
       const newProject = {
@@ -42,7 +52,11 @@ function App() {
     });
   }
 
-  let content;
+  const selectedProject = projects.projectsArray.find(
+    (project) => project.id === projects.selectedProject
+  );
+
+  let content = <SelectedProject project={selectedProject} />;
 
   if (projects.selectedProject === null) {
     content = (
@@ -57,6 +71,7 @@ function App() {
       <Sidebar
         onAddProject={handleStartAddProject}
         projects={projects.projectsArray}
+        onSelectProject={handleSelectProject}
       />
       {content}
     </main>
