@@ -7,8 +7,35 @@ import SelectedProject from './components/selectedProject';
 function App() {
   const [projects, setProjects] = useState({
     selectedProject: undefined,
-    projectsArray: [],
+    projects: [],
+    tasks: [],
   });
+
+  function handleAddTask(task) {
+    setProjects((prevValues) => {
+      const taskId = Math.random();
+
+      const newTask = {
+        text: task,
+        projectId: prevValues.selectedProject,
+        id: taskId,
+      };
+
+      return {
+        ...prevValues,
+        tasks: [...prevValues.tasks, newTask],
+      };
+    });
+  }
+
+  function handleDeleteTask(id) {
+    setProjects((prevValues) => {
+      return {
+        ...prevValues,
+        tasks: prevValues.tasks.filter((task) => task.id !== id),
+      };
+    });
+  }
 
   function handleStartAddProject() {
     setProjects((prevValues) => {
@@ -39,15 +66,17 @@ function App() {
 
   function handleAddProject(projectData) {
     setProjects((prevValues) => {
+      const projectId = Math.random();
+
       const newProject = {
         ...projectData,
-        id: Math.random(),
+        id: projectId,
       };
 
       return {
         ...prevValues,
         selectedProject: undefined,
-        projectsArray: [...prevValues.projectsArray, newProject],
+        projects: [...prevValues.projects, newProject],
       };
     });
   }
@@ -57,19 +86,25 @@ function App() {
       return {
         ...prevValues,
         selectedProject: undefined,
-        projectsArray: prevValues.projectsArray.filter(
+        projects: prevValues.projects.filter(
           (project) => project.id !== prevValues.selectedProject
         ),
       };
     });
   }
 
-  const selectedProject = projects.projectsArray.find(
+  const selectedProject = projects.projects.find(
     (project) => project.id === projects.selectedProject
   );
 
   let content = (
-    <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+    <SelectedProject
+      project={selectedProject}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      tasks={projects.tasks}
+    />
   );
 
   if (projects.selectedProject === null) {
@@ -84,7 +119,7 @@ function App() {
     <main className='h-screen my-8 flex gap-8'>
       <Sidebar
         onAddProject={handleStartAddProject}
-        projects={projects.projectsArray}
+        projects={projects.projects}
         onSelectProject={handleSelectProject}
       />
       {content}
