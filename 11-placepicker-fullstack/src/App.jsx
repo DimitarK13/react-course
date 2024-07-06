@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
 import Places from './components/Places.jsx';
 import Modal from './components/Modal.jsx';
@@ -7,12 +7,60 @@ import logoImg from './assets/logo.png';
 import AvailablePlaces from './components/AvailablePlaces.jsx';
 import Error from './components/Error.jsx';
 
+import { sortPlacesByDistance } from './loc.js';
+
+async function updateUserPlaces(places) {
+  const res = await fetch('http://localhost:3000/user-places', {
+    method: 'PUT',
+    body: JSON.stringify({ places }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const resData = await res.json();
+
+  if (!res.ok) throw new Error('Failed to update user data');
+
+  return resData.message;
+}
+
 function App() {
   const selectedPlace = useRef();
 
   const [userPlaces, setUserPlaces] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [errUpdatingPlaces, setErrUpdatingPlaces] = useState();
+  const [isFetching, setIsFetching] = useState();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    setIsFetching(true);
+    async function fetchPlaces() {
+      try {
+        const res = await fetch('http://localhost:3000/user-places');
+        const resData = await res.json();
+
+        if (!res.ok) throw new Error('Failed to fetch user data');
+
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const sortedPlaces = sortPlacesByDistance(
+            resData.places,
+            pos.coords.latitude,
+            pos.coords.longitude
+          );
+
+          setUserPlaces(sortedPlaces);
+          setIsFetching(false);
+        });
+      } catch (err) {
+        setError({ message: err.message || 'Could not fetch places!' });
+        setIsFetching(false);
+      }
+    }
+
+    fetchPlaces();
+  }, []);
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -34,22 +82,6 @@ function App() {
       return [selectedPlace, ...prevPickedPlaces];
     });
 
-    async function updateUserPlaces(places) {
-      const res = await fetch('http://localhost:3000/user-places', {
-        method: 'PUT',
-        body: JSON.stringify({ places }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const resData = await res.json();
-
-      if (!res.ok) throw new Error('Failed to update user data');
-
-      return resData.message;
-    }
-
     try {
       await updateUserPlaces([selectedPlace, ...userPlaces]);
     } catch (err) {
@@ -60,13 +92,27 @@ function App() {
     }
   }
 
-  const handleRemovePlace = useCallback(async function handleRemovePlace() {
-    setUserPlaces((prevPickedPlaces) =>
-      prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
-    );
+  const handleRemovePlace = useCallback(
+    async function handleRemovePlace() {
+      setUserPlaces((prevPickedPlaces) =>
+        prevPickedPlaces.filter(
+          (place) => place.id !== selectedPlace.current.id
+        )
+      );
 
-    setModalIsOpen(false);
-  }, []);
+      try {
+        await updateUserPlaces(
+          userPlaces.filter((place) => place.id !== selectedPlace.current.id)
+        );
+      } catch (err) {
+        setUserPlaces(userPlaces);
+        setErrUpdatingPlaces({ message: err.message || 'Failed to delete!' });
+      }
+
+      setModalIsOpen(false);
+    },
+    [userPlaces]
+  );
 
   function handleError() {
     setErrUpdatingPlaces(null);
@@ -100,12 +146,17 @@ function App() {
         </p>
       </header>
       <main>
-        <Places
-          title="I'd like to visit ..."
-          fallbackText='Select the places you would like to visit below.'
-          places={userPlaces}
-          onSelectPlace={handleStartRemovePlace}
-        />
+        {error && <Error title='An Error Occured' message={error.message} />}
+        {!error && (
+          <Places
+            title="I'd like to visit ..."
+            isLoading={isFetching}
+            loadingText='Fetching data...'
+            fallbackText='Select the places you would like to visit below.'
+            places={userPlaces}
+            onSelectPlace={handleStartRemovePlace}
+          />
+        )}
 
         <AvailablePlaces onSelectPlace={handleSelectPlace} />
       </main>
