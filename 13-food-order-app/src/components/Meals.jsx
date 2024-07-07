@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
+
 import formatPrices from '../formatPrices';
 import CartContext from '../store/CartContext';
 

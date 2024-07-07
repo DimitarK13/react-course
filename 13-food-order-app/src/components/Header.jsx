@@ -1,6 +1,13 @@
-import logo from '../assets/logo.jpg';
+import { useContext } from 'react';
 
-export default function Header({ itemsInCart = 0 }) {
+import logo from '../assets/logo.jpg';
+import CartContext from '../store/CartContext';
+
+export default function Header() {
+  const cartCtx = useContext(CartContext);
+
+  const itemsInCart = cartCtx.items.reduce((n, item) => n + item.quantity, 0);
+
   return (
     <header id='main-header'>
       <div id='title'>
