@@ -38,10 +38,10 @@ function cartReducer(state, action) {
       updatedItems.splice(hasItemIndex, 1);
     } else {
       const updatedItem = {
-        existingCartItem,
+        ...existingCartItem,
         quantity: existingCartItem.quantity - 1,
       };
-      updatedItem[hasItemIndex] = updatedItem;
+      updatedItems[hasItemIndex] = updatedItem;
     }
 
     return { ...state, items: updatedItems };
@@ -63,8 +63,8 @@ export function CartContextProvider({ children }) {
     dispatchCartAction({ type: 'ADD_ITEM', item });
   }
 
-  function removeItem(itemId) {
-    dispatchCartAction({ type: 'REMOVE_ITEM', id: itemId });
+  function removeItem(id) {
+    dispatchCartAction({ type: 'REMOVE_ITEM', id });
   }
 
   return (
