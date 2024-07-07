@@ -3,7 +3,7 @@ import Modal from './Modal';
 import CartContext from '../store/CartContext';
 import formatPrices from '../formatPrices';
 
-export default function Cart({ isOpen, onHideModal }) {
+export default function Cart({ isCartOpen, onHideCart, onShowCheckout }) {
   const cartCtx = useContext(CartContext);
 
   const totalPrice = cartCtx.items.reduce(
@@ -20,7 +20,7 @@ export default function Cart({ isOpen, onHideModal }) {
   }
 
   return (
-    <Modal className='cart' open={isOpen}>
+    <Modal className='cart' open={isCartOpen}>
       <h2>Your Order</h2>
 
       <ul>
@@ -39,11 +39,16 @@ export default function Cart({ isOpen, onHideModal }) {
       </ul>
       <p className='cart-total'>{formatPrices.format(totalPrice)}</p>
       <p className='modal-actions'>
-        <button className='text-button' onClick={onHideModal}>
+        <button className='text-button' onClick={onHideCart}>
           Close
         </button>
         {cartCtx.items.length > 0 && (
-          <button className='button' onClick={onHideModal}>
+          <button
+            className='button'
+            onClick={() => {
+              onShowCheckout();
+              onHideCart();
+            }}>
             Checkout
           </button>
         )}

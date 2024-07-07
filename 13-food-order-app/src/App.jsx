@@ -3,23 +3,41 @@ import Cart from './components/Cart';
 import Header from './components/Header';
 import Meals from './components/Meals';
 import { CartContextProvider } from './store/CartContext';
+import Checkout from './components/Checkout';
 
 function App() {
-  const [showModal, setShowModal] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
-  function handleShowModal() {
-    setShowModal(true);
+  function handleShowCart() {
+    setShowCart(true);
   }
 
-  function handleHideModal() {
-    setShowModal(false);
+  function handleHideCart() {
+    setShowCart(false);
+  }
+
+  function handleShowCheckout() {
+    setShowCheckout(true);
+  }
+
+  function handleHideCheckout() {
+    setShowCheckout(false);
   }
 
   return (
     <CartContextProvider>
-      <Header onShowModal={handleShowModal} />
+      <Header onShowCart={handleShowCart} />
       <Meals />
-      <Cart isOpen={showModal} onHideModal={handleHideModal} />
+      <Cart
+        isCartOpen={showCart}
+        onHideCart={handleHideCart}
+        onShowCheckout={handleShowCheckout}
+      />
+      <Checkout
+        isCheckoutOpen={showCheckout}
+        onHideCheckout={handleHideCheckout}
+      />
     </CartContextProvider>
   );
 }

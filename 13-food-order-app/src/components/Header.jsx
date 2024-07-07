@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import logo from '../assets/logo.jpg';
 import CartContext from '../store/CartContext';
 
-export default function Header({ onShowModal }) {
+export default function Header({ onShowCart }) {
   const cartCtx = useContext(CartContext);
 
   const itemsInCart = cartCtx.items.reduce((n, item) => n + item.quantity, 0);
@@ -16,7 +16,7 @@ export default function Header({ onShowModal }) {
       </div>
 
       <nav>
-        <button className='text-button' onClick={onShowModal}>
+        <button className='text-button' onClick={onShowCart}>
           Cart ({itemsInCart})
         </button>
       </nav>
