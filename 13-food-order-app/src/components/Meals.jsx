@@ -34,9 +34,13 @@ export default function Meals() {
     cartCtx.addItem(meal);
   }
 
+  if (error) {
+    return <p className='center'>{error.message}</p>;
+  }
+
   return (
     <ul id='meals'>
-      {isFetching && <p>Loading data...</p>}
+      {isFetching && <p className='center'>Loading data...</p>}
       {meals.map((meal) => (
         <li className='meal-item' key={meal.id}>
           <article>
@@ -57,7 +61,6 @@ export default function Meals() {
           </article>
         </li>
       ))}
-      {error && <p>{error.message}</p>}
     </ul>
   );
 }
