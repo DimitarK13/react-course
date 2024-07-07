@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
+import formatPrices from '../formatPrices';
 
 export default function Meals() {
   const [isFetching, setIsFetching] = useState();
@@ -36,7 +37,9 @@ export default function Meals() {
 
             <div>
               <h3>{meal.name}</h3>
-              <span className='meal-item-price'>{meal.price}</span>
+              <span className='meal-item-price'>
+                {formatPrices.format(meal.price)}
+              </span>
               <p className='meal-item-description'>{meal.description}</p>
               <button className='button meal-item-actions'>Add to Cart</button>
             </div>
