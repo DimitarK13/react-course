@@ -41,8 +41,10 @@ export default function Meals() {
                 {formatPrices.format(meal.price)}
               </span>
               <p className='meal-item-description'>{meal.description}</p>
-              <button className='button meal-item-actions'>Add to Cart</button>
             </div>
+            <p className=' meal-item-actions'>
+              <button className='button'>Add to Cart</button>
+            </p>
           </article>
         </li>
       ))}
