@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import formatPrices from '../formatPrices';
+import CartContext from '../store/CartContext';
 
 export default function Meals() {
+  const cartCtx = useContext(CartContext);
+
   const [isFetching, setIsFetching] = useState();
   const [meals, setMeals] = useState([]);
   const [error, setError] = useState();
@@ -27,6 +30,10 @@ export default function Meals() {
     fetchMeals();
   }, []);
 
+  function handleAddMeal(meal) {
+    cartCtx.addItem(meal);
+  }
+
   return (
     <ul id='meals'>
       {isFetching && <p>Loading data...</p>}
@@ -42,8 +49,10 @@ export default function Meals() {
               </span>
               <p className='meal-item-description'>{meal.description}</p>
             </div>
-            <p className=' meal-item-actions'>
-              <button className='button'>Add to Cart</button>
+            <p className='meal-item-actions'>
+              <button onClick={() => handleAddMeal(meal)} className='button'>
+                Add to Cart
+              </button>
             </p>
           </article>
         </li>
