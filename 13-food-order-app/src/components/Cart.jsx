@@ -39,12 +39,14 @@ export default function Cart({ isOpen, onHideModal }) {
       </ul>
       <p className='cart-total'>{formatPrices.format(totalPrice)}</p>
       <p className='modal-actions'>
-        <button className='text-only' onClick={onHideModal}>
+        <button className='text-button' onClick={onHideModal}>
           Close
         </button>
-        <button className='button' onClick={onHideModal}>
-          Checkout
-        </button>
+        {cartCtx.items.length > 0 && (
+          <button className='button' onClick={onHideModal}>
+            Checkout
+          </button>
+        )}
       </p>
     </Modal>
   );
