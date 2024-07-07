@@ -8,7 +8,9 @@ export default function Header({ itemsInCart = 0 }) {
         <h1>TheFoodShop</h1>
       </div>
 
-      <button className='text-button'>Cart ({itemsInCart})</button>
+      <nav>
+        <button className='text-button'>Cart ({itemsInCart})</button>
+      </nav>
     </header>
   );
 }
