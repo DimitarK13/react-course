@@ -1,7 +1,18 @@
-import ReactDOM from 'react-dom/client';
+import { useSelector } from 'react-redux';
 
-import './index.css';
-import App from './App';
+import Cart from './components/Cart/Cart';
+import Layout from './components/Layout/Layout';
+import Products from './components/Shop/Products';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+function App() {
+  const showCart = useSelector((state) => state.ui.cartIsVisible);
+
+  return (
+    <Layout>
+      {showCart && <Cart />}
+      <Products />
+    </Layout>
+  );
+}
+
+export default App;
