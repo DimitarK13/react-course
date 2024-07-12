@@ -3,12 +3,14 @@ import Homepage from './pages/Homepage';
 import EventsPage, { loader as eventsLoader } from './pages/EventsPage';
 import EventDetailPage, {
   loader as eventsDetailLoader,
+  action as deleteEventAction,
 } from './pages/EventDetailPage';
 import EditEventPage from './pages/EditEventPage';
-import NewEventPage, { action as newEventAction } from './pages/NewEventPage';
+import NewEventPage from './pages/NewEventPage';
 import Root from './pages/Root';
 import EventsRoot from './pages/EventsRoot';
 import Error from './pages/Error';
+import { action as manipulateEventAction } from './components/EventForm';
 
 const router = createBrowserRouter([
   {
@@ -32,20 +34,27 @@ const router = createBrowserRouter([
             loader: eventsDetailLoader,
             children: [
               {
-                path: '',
+                index: true,
                 element: <EventDetailPage />,
+                action: deleteEventAction,
               },
-              { path: 'edit', element: <EditEventPage /> },
+              {
+                path: 'edit',
+                element: <EditEventPage />,
+                action: manipulateEventAction,
+              },
             ],
           },
-          { path: 'new', element: <NewEventPage />, action: newEventAction },
+          {
+            path: 'new',
+            element: <NewEventPage />,
+            action: manipulateEventAction,
+          },
         ],
       },
     ],
   },
 ]);
-
-// BONUS: Add another (nested) layout route that adds the <EventNavigation> component above all /events... page components
 
 function App() {
   return <RouterProvider router={router} />;
