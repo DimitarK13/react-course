@@ -280,12 +280,6 @@ main {
   display: inline-block;
   font-size: 0.85rem;
   margin-left: 0.25rem;
-
-  transition: transform 175ms ease-in-out;
-}
-
-.challenge-item-details.expanded .challenge-item-details-icon {
-  transform: rotate(180deg);
 }
 
 .challenge-item-description {
@@ -315,19 +309,6 @@ main {
   width: 30rem;
   max-width: 90%;
   z-index: 10;
-
-  animation: slide-up-fade-in 175ms ease-in-out forwards;
-}
-
-@keyframes slide-up-fade-in {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .modal h2 {
